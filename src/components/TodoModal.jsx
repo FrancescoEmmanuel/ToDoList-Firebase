@@ -3,7 +3,7 @@ import { MdOutlineClose } from 'react-icons/md';
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Button from './Button';
-import {collection, addDoc,updateDoc, doc} from 'firebase/firestore'
+import {collection, addDoc,updateDoc, doc,getDoc} from 'firebase/firestore'
 import { db, auth } from '../Firebase';
 
 function TodoModal({ openModal, setModal, selectedItem,setSelectedItem,userId }) {
@@ -30,41 +30,51 @@ function TodoModal({ openModal, setModal, selectedItem,setSelectedItem,userId })
   }, [openModal, selectedItem]);
 
 
+  // Inside TodoModal component
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
-
-      
-
       if (mode === 'update' && selectedItem) {
+        // Existing todo item, update the document
         await updateDoc(doc(db, 'todos', userId, 'items', selectedItem.id), {
           title,
           type,
           date,
-          description
+          description,
         });
-        console.log('Document updated successfully!');
-        setSelectedItem(null);
       } else {
-        await addDoc(collection(db, 'todos',userId, 'items'), {
+        // New todo item, add a new document
+        await addDoc(collection(db, 'todos', userId, 'items'), {
           title,
           type,
           date,
           description,
           completed: false,
         });
-        console.log('Document added successfully!');
+  
+        // Increment taskTodo in user document
+        const userDocRef = doc(db, 'users', userId);
+        const userDoc = await getDoc(userDocRef);
+  
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          await updateDoc(userDocRef, {
+            taskToComplete: userData.taskToComplete + 1,
+          });
+        }
       }
     } catch (err) {
       console.error(`Error ${mode === 'update' ? 'updating' : 'adding'} item:`, err);
       alert(`Error ${mode === 'update' ? 'updating' : 'adding'} item. Please try again.`);
     } finally {
+      // Reset form state and close the modal
       setMode('add');
       setTitle('');
       setType('work');
       setDate('');
       setDescription('');
       setModal(false);
+      setSelectedItem(null); // Clear selectedItem
     }
   };
   

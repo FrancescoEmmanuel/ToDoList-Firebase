@@ -1,7 +1,7 @@
 import React from 'react';
 import { gitProvider,googleProvider } from '../Firebase';
 
-function LoginForm({ handleCredentials, handleLogIn, handleSocial }) {
+function LoginForm({ handleCredentials, handleLogIn, handleSocial, gitIcon}) {
   return (
     <div className="p-8 rounded w-[600px]">
       <div className="mb-4 text-white"> 
@@ -34,13 +34,13 @@ function LoginForm({ handleCredentials, handleLogIn, handleSocial }) {
 
       <div className="flex flex-col items-center mt-4">
         <div className='flex flex-row'>
-            <div className="w-10 h-10 bg-zinc-600 rounded-full flex items-center justify-center mr-4 shadow-md" onClick={() => handleSocial(googleProvider)}>
+            <button className="w-10 h-10 bg-zinc-600 rounded-full flex items-center justify-center mr-4 shadow-md" onClick={() => handleSocial(googleProvider)}>
             <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google Icon" className="w-6 h-6" />
-            </div>
+            </button>
 
-            <div className="w-10 h-10 bg-zinc-600 rounded-full flex items-center justify-center mr-4 shadow-md " onClick={() => handleSocial(gitProvider)}>
-            <img src="src\assets\icons8-github-50.png" alt="Github Icon" className="w-6 h-6" />
-            </div>
+            <button className="w-10 h-10 bg-zinc-600 rounded-full flex items-center justify-center mr-4 shadow-md " onClick={() => handleSocial(gitProvider)}>
+            <img src={gitIcon} alt="Github Icon" className="w-6 h-6" />
+            </button>
         </div>
         
       </div>
