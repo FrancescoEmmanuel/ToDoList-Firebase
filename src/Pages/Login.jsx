@@ -14,7 +14,6 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithP
 
 import { useNavigate } from 'react-router-dom';
 import { db, auth} from '../Firebase';
-import { collection, doc, setDoc } from 'firebase/firestore'
 import Lottie from 'lottie-react';
 import animationData from '../assets/Animation-1710175289637.json';
 import animationData2 from "../assets/Animation-1710182500493.json"
