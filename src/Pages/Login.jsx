@@ -6,6 +6,8 @@ import Loginform from '../components/Loginform'
 import Signupform from '../components/Signupform'
 import { ref, getDownloadURL } from 'firebase/storage';
 import { imageDb } from '../Firebase';
+import { getDoc, setDoc, doc, collection, query, where, getDocs } from 'firebase/firestore';
+
 
 
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, updateProfile } from 'firebase/auth';
@@ -44,23 +46,28 @@ function Login() {
     try {
       const result = await signInWithPopup(auth, authProvider);
       const user = result.user;
-
-      // Check if the user is already registered
-      const userDoc = await doc(db, 'users', user.uid).get();
-      
-      if (!userDoc.exists()) {
-        // If not, add user to the 'users' collection
+  
+      const usersCollection = collection(db, 'users');
+      const userQuery = query(usersCollection, where('uid', '==', user.uid));
+      const querySnapshot = await getDocs(userQuery);
+  
+      if (querySnapshot.empty) {
+        // User document doesn't exist, create it
         await setDoc(doc(db, 'users', user.uid), {
           email: user.email,
+          name: user.displayName,
+          taskCompleted: 0,
+          taskToComplete: 0,
+          missedTask: 0
         });
       }
-
-      // Navigate to the desired page (change "/a" to your desired route)
+  
       navigate("/ToDoPage");
     } catch (error) {
       console.error('Social Sign-In Error:', error);
     }
   };
+  
 
   function handleCredentials(e) {
     setUserCredentials({...userCredentials, [e.target.name] : e.target.value});
@@ -96,8 +103,9 @@ function Login() {
         // Set the document in the 'users' collection with the user's UID
         await setDoc(doc(db, 'users', user.uid), userData);
   
-        // Navigate to the desired page (change "/a" to your desired route)
+    
         navigate("/ToDoPage");
+        
       })
       .catch((error) => {
         if (error.code === "auth/weak-password") {
