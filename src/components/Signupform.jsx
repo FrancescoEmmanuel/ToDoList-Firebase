@@ -52,7 +52,7 @@ function Signupform({handleCredentials, handleSignUp, handleSocial, gitIcon}) {
                 <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google Icon" className="w-6 h-6" />
                 </button>
     
-                <button className="w-10 h-10 bg-zinc-600 rounded-full flex items-center justify-center mr-4 shadow-md" onClick={() => handleSocial(gitProvider)}>
+                <button className="w-10 h-10 bg-zinc-600 rounded-full flex items-center justify-center mr-4 shadow-md" onClick={() => {handleSocial(gitProvider)}}>
                 <img src={gitIcon} alt="Github Icon" className="w-6 h-6" />
                 </button>
             </div>

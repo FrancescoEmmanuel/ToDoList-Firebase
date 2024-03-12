@@ -56,7 +56,7 @@ function Login() {
       }
 
       // Navigate to the desired page (change "/a" to your desired route)
-      navigate("/a");
+      navigate("/ToDoPage");
     } catch (error) {
       console.error('Social Sign-In Error:', error);
     }
